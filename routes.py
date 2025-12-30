@@ -8,56 +8,56 @@ from sanitizer import sanitize_patient
 load_dotenv()
 
 
-# def getPatient():
-#     KSense_api_key = os.getenv("KSENSE_API_KEY")
-#     url = "https://assessment.ksensetech.com/api/patients?page=1&limit=1"
+def getPatient():
+    KSense_api_key = os.getenv("KSENSE_API_KEY")
+    url = "https://assessment.ksensetech.com/api/patients?page=1&limit=1"
 
-#     headers = {"x-api-key": KSense_api_key, "Content-Type": "application/json"}
-#     max_retries = 3
-#     backoff_factor = 1
-#     response = None
+    headers = {"x-api-key": KSense_api_key, "Content-Type": "application/json"}
+    max_retries = 3
+    backoff_factor = 1
+    response = None
 
-#     for attempt in range(max_retries):
-#         try:
-#             response = requests.get(url, headers=headers, timeout=5)
-#             if response.status_code == 200:
-#                 break
-#             elif response.status_code >= 500 and attempt < max_retries - 1:
-#                 wait_time = backoff_factor * (2**attempt)
-#                 time.sleep(wait_time)
-#             else:
-#                 break
-#         except requests.RequestException as e:
-#             if attempt < max_retries - 1:
-#                 wait_time = backoff_factor * (2**attempt)
-#                 time.sleep(wait_time)
-#             else:
-#                 raise
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers, timeout=5)
+            if response.status_code == 200:
+                break
+            elif response.status_code >= 500 and attempt < max_retries - 1:
+                wait_time = backoff_factor * (2**attempt)
+                time.sleep(wait_time)
+            else:
+                break
+        except requests.RequestException as e:
+            if attempt < max_retries - 1:
+                wait_time = backoff_factor * (2**attempt)
+                time.sleep(wait_time)
+            else:
+                raise
 
-#     if response and response.status_code == 200:
-#         data = response.json()
+    if response and response.status_code == 200:
+        data = response.json()
 
-#         # Sanitize the patient data
-#         sanitized_patients = []
-#         if "data" in data and len(data["data"]) > 0:
-#             for raw_patient in data["data"]:
-#                 sanitized_patient = sanitize_patient(raw_patient)
-#                 sanitized_patients.append(sanitized_patient.to_dict())
+        # Sanitize the patient data
+        sanitized_patients = []
+        if "data" in data and len(data["data"]) > 0:
+            for raw_patient in data["data"]:
+                sanitized_patient = sanitize_patient(raw_patient)
+                sanitized_patients.append(sanitized_patient.to_dict())
 
-#         # Return in the ideal response format
-#         return {
-#             "data": sanitized_patients,
-#             "pagination": data.get("pagination", {}),
-#             "metadata": {
-#                 "timestamp": datetime.now().isoformat() + "Z",
-#                 "version": "v1.0",
-#                 "requestId": f"req_{int(time.time())}",
-#             },
-#         }
-#     else:
-#         return {
-#             "error": f"Failed with status code {response.status_code} and message: {response.text}"
-#         }
+        # Return in the ideal response format
+        return {
+            "data": sanitized_patients,
+            "pagination": data.get("pagination", {}),
+            "metadata": {
+                "timestamp": datetime.now().isoformat() + "Z",
+                "version": "v1.0",
+                "requestId": f"req_{int(time.time())}",
+            },
+        }
+    else:
+        return {
+            "error": f"Failed with status code {response.status_code} and message: {response.text}"
+        }
 
 
 def getPatients():

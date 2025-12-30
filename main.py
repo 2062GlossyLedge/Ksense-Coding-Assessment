@@ -9,7 +9,7 @@ from routes import getPatients
 from patient import Patient
 from high_risk_classifier import get_high_risk_patients
 from fever_classifier import get_fever_patients
-from data_quality import get_data_quality_issues
+from data_quality_classifier import get_data_quality_issues
 from submit_assessment import submit_to_ksense, print_submission_results
 
 

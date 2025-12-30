@@ -8,7 +8,7 @@ they capture the correct number of patients (not too few, not too many).
 from patient import Patient
 from high_risk_classifier import get_high_risk_patients
 from fever_classifier import get_fever_patients
-from data_quality import get_data_quality_issues
+from data_quality_classifier import get_data_quality_issues
 from risk_scorer import calculate_total_risk, get_risk_breakdown
 
 
