@@ -100,7 +100,7 @@ def main():
                 else ""
             )
         )
-    return
+
     # Step 4: Submit to KSense API
     result = submit_to_ksense(
         high_risk_patients=high_risk_ids,

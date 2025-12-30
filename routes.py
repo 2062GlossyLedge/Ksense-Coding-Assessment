@@ -73,8 +73,10 @@ def getPatients():
     page = 1
     has_next = True
 
+    maxPages = 15  # Safety limit to avoid infinite loops
+
     # Loop through pages dynamically using pagination metadata
-    while has_next:
+    while page <= maxPages:
         url = f"{base_url}?page={page}"
 
         # Retry logic with exponential backoff
@@ -86,13 +88,12 @@ def getPatients():
                     data = response.json()
                     print("***rawdata:", data)
 
-                    # Extract and sanitize patients from 'data' field
-                    if "data" in data:
-                        raw_patients = data["data"]
-                        # Sanitize each patient to match the standardized format
-                        for raw_patient in raw_patients:
-                            sanitized_patient = sanitize_patient(raw_patient)
-                            all_patients.append(sanitized_patient.to_dict())
+                    # Extract and sanitize patients from 'data' or 'patients' field
+                    raw_patients = data.get("data") or data.get("patients") or []
+                    # Sanitize each patient to match the standardized format
+                    for raw_patient in raw_patients:
+                        sanitized_patient = sanitize_patient(raw_patient)
+                        all_patients.append(sanitized_patient.to_dict())
 
                     # Check pagination metadata to see if there are more pages
                     if "pagination" in data:
